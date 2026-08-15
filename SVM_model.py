@@ -18,9 +18,9 @@ def evaluate_and_print(y_true, y_pred, title):
     print(confusion_matrix(y_true, y_pred))
 
 # %%
-print("Loading data from 'heart.csv'...")
+print("Loading data from 'heart1.csv'...")
 # 1. Load the data directly in this script
-df = pd.read_csv("heart.csv")
+df = pd.read_csv("heart1.csv")
 
 # Basic cleaning
 df = df.drop_duplicates()

@@ -23,7 +23,7 @@ def evaluate_model(y_true, y_pred, model_name="Model"):
     print("Confusion Matrix:")
     print(cm)
 
-def load_and_preprocess_data(filepath="heart.csv"):
+def load_and_preprocess_data(filepath="heart1.csv"):
     """
     Loads data from CSV, cleans it, and splits it into training and testing sets.
     """
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     print("Starting Model Training Phase...")
     
     # 1. Load and prepare the data
-    X_train, X_test, y_train, y_test, feature_names = load_and_preprocess_data("heart.csv")
+    X_train, X_test, y_train, y_test, feature_names = load_and_preprocess_data("heart1.csv")
     
     if X_train is not None:
         # 2. Train and evaluate the model

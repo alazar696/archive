@@ -11,8 +11,8 @@ from sklearn.metrics import confusion_matrix, silhouette_score
 print("Libraries loaded successfully!")
 
 # %%
-print("Loading data from 'heart.csv'...")
-df = pd.read_csv("heart.csv")
+print("Loading data from 'heart1.csv'...")
+df = pd.read_csv("heart1.csv")
 
 # Basic cleaning
 df = df.drop_duplicates()

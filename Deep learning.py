@@ -27,9 +27,9 @@ def evaluate_and_print(y_true, y_pred, title):
 print("Libraries loaded successfully!")
 
 # %%
-print("Loading data from 'heart.csv'...")
+print("Loading data from 'heart1.csv'...")
 # Load the dataset
-df = pd.read_csv("heart.csv")
+df = pd.read_csv("heart1.csv")
 
 # Basic cleaning
 df = df.drop_duplicates()

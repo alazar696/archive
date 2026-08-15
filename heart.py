@@ -1,83 +1,62 @@
+# %%
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-def load_and_explore_data(filepath="heart.csv"):
-    """
-    Loads the NEW cardiovascular dataset (CSV format) and performs initial exploratory data analysis.
-    """
-    print(f"Loading '{filepath}'...")
-    try:
-        df = pd.read_csv(filepath)
-        print("Data loaded successfully!\n")
-    except Exception as e:
-        print(f"An error occurred while loading the file. Make sure the path is correct: {e}")
-        return None
+print("Libraries loaded successfully!")
 
-    print("-" * 30)
-    print("DATASET OVERVIEW")
-    print("-" * 30)
-    
-    # Display the first few rows to understand the new structure and column names
-    print("\nFirst 5 rows of the dataset:")
-    print(df.head())
+# %%
+print("--- STEP 1: LOADING RAW DATA ---")
+filepath = "heart.csv"
+df = pd.read_csv(filepath)
 
-    # Display data types
-    print("\nDataset Information (Pay attention to the column names!):")
-    df.info()
+print(f"Original dataset size: {df.shape[0]} rows and {df.shape[1]} columns.")
+print("\nFirst 5 rows:")
+print(df.head())
 
-    # Calculate basic statistical details
-    print("\nDescriptive Statistics:")
-    print(df.describe())
+# %%
+print("\n--- STEP 2: DATA CLEANING ---")
+# Check for missing values and duplicates
+missing_values = df.isnull().sum().sum()
+duplicate_count = df.duplicated().sum()
 
-    print("\n" + "-" * 30)
-    print("DATA QUALITY CHECKS")
-    print("-" * 30)
-    
-    missing_values = df.isnull().sum()
-    print("\nMissing values in each column:")
-    print(missing_values[missing_values > 0] if missing_values.sum() > 0 else "No missing values found.")
+print(f"Found {missing_values} missing values and {duplicate_count} duplicate rows.")
 
-    duplicates = df.duplicated().sum()
-    print(f"\nNumber of duplicate rows: {duplicates}")
+# Drop duplicates and missing values permanently for our clean dataset
+print(f"Dropping {duplicate_count} duplicates...")
+df_clean = df.drop_duplicates()
+df_clean = df_clean.dropna()
 
-    return df
+print(f"Cleaned dataset size: {df_clean.shape[0]} rows and {df_clean.shape[1]} columns.")
+print(f"Total rows removed: {df.shape[0] - df_clean.shape[0]}")
 
-def visualize_data(df):
-    """
-    Generates basic visualizations to understand data distribution and correlations.
-    """
-    if df is None:
-        return
+# Save to the brand new CSV file!
+clean_filepath = "heart1.csv"
+df_clean.to_csv(clean_filepath, index=False)
+print(f"\n✅ SUCCESS: Cleaned data saved as '{clean_filepath}'!")
+print("We will use 'heart1.csv' for all our model training going forward.")
 
-    sns.set_theme(style="whitegrid")
-    
-    # We will assume the target column is the very last column in the CSV file
-    target_col = df.columns[-1]
-    print(f"\nUsing '{target_col}' as the target variable for plots.")
+# %%
+print("\n--- STEP 3: VISUALIZING CLEAN DATA ---")
+sns.set_theme(style="whitegrid")
 
-    # Create a figure with two subplots
-    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+# Assume target is the last column
+target_col = df_clean.columns[-1]
+print(f"Using '{target_col}' as the target variable for plots.")
 
-    # Plot 1: Check if the classes are balanced
-    sns.countplot(x=target_col, data=df, ax=axes[0], palette="Set2")
-    axes[0].set_title(f'Distribution of Target Variable ({target_col})')
-    axes[0].set_xlabel(target_col)
-    axes[0].set_ylabel('Count')
+fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
-    # Plot 2: Correlation Matrix
-    numeric_df = df.select_dtypes(include=['float64', 'int64'])
-    corr_matrix = numeric_df.corr()
-    
-    sns.heatmap(corr_matrix, annot=False, cmap='coolwarm', ax=axes[1], vmin=-1, vmax=1)
-    axes[1].set_title('Feature Correlation Matrix')
+# Plot 1: Check if the classes are balanced
+sns.countplot(x=target_col, data=df_clean, ax=axes[0], palette="Set2")
+axes[0].set_title(f'Distribution of Target Variable ({target_col})')
 
-    plt.tight_layout()
-    print("\nDisplaying visualizations...")
-    plt.show()
+# Plot 2: Correlation Matrix to see which features link to heart disease
+numeric_df = df_clean.select_dtypes(include=['float64', 'int64'])
+corr_matrix = numeric_df.corr()
+sns.heatmap(corr_matrix, annot=False, cmap='coolwarm', ax=axes[1], vmin=-1, vmax=1)
+axes[1].set_title('Feature Correlation Matrix')
 
-if __name__ == "__main__":
-    # Ensure heart.csv is saved in the exact same folder as this Python script
-    dataset = load_and_explore_data("heart.csv") 
-    visualize_data(dataset)
+plt.tight_layout()
+print("Displaying visualizations! Close the plot window to finish the script.")
+plt.show()
