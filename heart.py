@@ -81,4 +81,3 @@ if __name__ == "__main__":
     # Ensure heart.csv is saved in the exact same folder as this Python script
     dataset = load_and_explore_data("heart.csv") 
     visualize_data(dataset)
-
