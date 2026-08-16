@@ -10,9 +10,17 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
 # TensorFlow and Keras for building the Neural Network
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
+# Pylance may report missing imports when TensorFlow is not installed in the active environment.
+# Guard the import so the script can fail gracefully and explain how to install it.
+try:
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Dropout
+except ImportError as exc:
+    raise ImportError(
+        "TensorFlow is not installed in the current Python environment. "
+        "Install it with: pip install tensorflow"
+    ) from exc
 
 def evaluate_and_print(y_true, y_pred, title):
     """Helper function to print out metrics clearly."""
@@ -115,3 +123,4 @@ evaluate_and_print(y_test, y_pred_binary, "Deep Learning (Neural Network)")
 # Save the trained model
 model.save("models/deep_learning_model.h5")
 print("\n✅ Deep Learning model saved to 'models/deep_learning_model.h5'.")
+joblib.dump(model, "models/deep_learning_model.pkl")  # Optional: Save as pickle for easier loading in some cases

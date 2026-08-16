@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.metrics import confusion_matrix, silhouette_score
-
+import joblib as jl
 print("Libraries loaded successfully!")
 
 # %%
@@ -105,4 +105,4 @@ axes[1].set_title('K-Means Natural Clusters')
 plt.tight_layout()
 print("\nDisplaying Plot! Close the plot window to finish the script.")
 plt.show()
-joblib.dump(kmeans, "models/kmeans_model.pkl")
+jl.dump(kmeans, "models/kmeans_model.pkl")
